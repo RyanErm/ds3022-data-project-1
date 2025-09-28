@@ -66,7 +66,7 @@ def load_parquet_files():
         logger.info("Created green trip data table")
 
         #collecting data for each year
-        for year in range(15,25): #year for loop
+        for year in range(15,17): #year for loop
             for month in range (1,13): #month for loop
                 year_str = str(year) #converting to string
                 if month<10: #convert the month number to the proper format
@@ -78,13 +78,14 @@ def load_parquet_files():
                 #make new input files for each year, month, and taxi type
                 input_file_yellow = f"https://d37ci6vzurychx.cloudfront.net/trip-data/yellow_tripdata_20{year_str}-{month_str}.parquet"
                 input_file_green = f"https://d37ci6vzurychx.cloudfront.net/trip-data/green_tripdata_20{year_str}-{month_str}.parquet"
-
+                
                 #insert yellow trip data
                 con.execute(f"""
                         INSERT INTO yellow_trip_data(tpep_pickup_datetime, tpep_dropoff_datetime, trip_distance, passenger_count)
                         SELECT tpep_pickup_datetime, tpep_dropoff_datetime, trip_distance, passenger_count FROM read_parquet("{input_file_yellow}");
              """)
                 logger.info(f"Inserted the following data into yellow table: Month - {month_str}, Year-20{year_str}  ")
+                print("got a yellow table")
                 time.sleep(40)
                 
                 #insert green trip data
@@ -93,6 +94,7 @@ def load_parquet_files():
                         SELECT lpep_pickup_datetime, lpep_dropoff_datetime, trip_distance, passenger_count FROM read_parquet("{input_file_green}");
                 """)
                 logger.info(f"Inserted the following data into green table: Month - {month_str}, Year-20{year_str}  ")
+                print('got a green table!')
                 time.sleep(40)
 
     except Exception as e:
