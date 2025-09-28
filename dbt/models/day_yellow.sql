@@ -1,0 +1,1 @@
+SELECT *, date_part('dayofweek', tpep_pickup_datetime) AS day_of_week FROM yellow_trip_data;

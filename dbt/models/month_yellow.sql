@@ -1,0 +1,1 @@
+SELECT *, date_part('month', tpep_pickup_datetime) AS month_of_year FROM yellow_trip_data;

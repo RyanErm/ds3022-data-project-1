@@ -1,0 +1,9 @@
+*load.log
+*clean.log
+*transform.log
+*analysis.log
+*test.py
+*emission.duckdb
+*emissions.duckdb
+*emissions.duckdb.tmp
+
