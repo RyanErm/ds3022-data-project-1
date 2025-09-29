@@ -17,6 +17,7 @@ def load_parquet_files():
         # Connect to local DuckDB instance
         con = duckdb.connect(database='emissions.duckdb', read_only=False)
         logger.info("Connected to DuckDB instance")
+        print("CONNECTED")
 
         #Delete the old emissions table
         con.execute(F"""
@@ -96,9 +97,24 @@ def load_parquet_files():
                 logger.info(f"Inserted the following data into green table: Month - {month_str}, Year-20{year_str}  ")
                 time.sleep(40)
 
+        num_yellow = con.execute(f""" 
+            SELECT COUNT(*) FROM yellow_trip_data;
+        """).fetchone()[0]
+        num_yellow = str(num_yellow)
+        logger.info(f"The number of entries in the yellow table is {num_yellow}")
+        print(f"The number of entries in the yellow table is {num_yellow}")
+
+        num_green = con.execute(f""" 
+            SELECT COUNT(*) FROM green_trip_data;
+        """).fetchone()[0]
+        num_green = str(num_green)
+        logger.info(f"The number of entries in the green table is {num_green}")
+        print(f"The number of entries in the green table is {num_green}")
+
     except Exception as e:
         print(f"An error occurred: {e}")
         logger.error(f"An error occurred: {e}")
 
 if __name__ == "__main__":
     load_parquet_files()
+

@@ -6,4 +6,7 @@
 *emission.duckdb
 *emissions.duckdb
 *emissions.duckdb.tmp
+*emissions.dbt
+*logs
+*dbt\target
 

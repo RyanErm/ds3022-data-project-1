@@ -1,7 +1,6 @@
 import duckdb
 import logging
 
-#CHANGE THE DAY, MONTH, sql statements
 
 #set up logger
 logging.basicConfig(
