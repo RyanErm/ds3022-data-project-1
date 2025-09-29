@@ -1,6 +1,7 @@
 import duckdb
 import logging
 
+#FIX TO GET RID OF NEGATIVE DISTANCE AND NEGATIVE TIME TRIPS
 
 #set up logger
 logging.basicConfig(

@@ -8,5 +8,5 @@
 *emissions.duckdb.tmp
 *emissions.dbt
 *logs
-*dbt\target
+*dbt\target\*
 
