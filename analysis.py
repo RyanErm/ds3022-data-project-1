@@ -18,19 +18,19 @@ def analyze_data():
         logger.info("Connected to DuckDB instance")
 
         #loop through every year
-        for year in range (15,25):
+        for year in range (15,17):
             year_str = year
 
             #Highest emission for yellow 
             highest_carbon_y = con.execute(f""" 
-                SELECT MAX(trip_co2_kgs) AS highest_emission FROM yellow_trip_data;
+                SELECT MAX(trip_co2_kgs) AS highest_emission FROM yellow_trip_data WHERE date_part("year", tpep_pickup_datetime) = 20{year_str};
             """).fetchone()[0] #get value
             print(f"The yellow taxi trip that produced the most kilograms of CO2 in the year 20{year_str} released {highest_carbon_y} kilograms. ")
             logger.info(f"The yellow taxi trip that produced the most kilograms of CO2 in the year 20{year_str} released {highest_carbon_y} kilograms. ")
 
             #Highest emission for green
             highest_carbon_g = con.execute(f""" 
-                SELECT MAX(trip_co2_kgs) AS highest_emission FROM green_trip_data;
+                SELECT MAX(trip_co2_kgs) AS highest_emission FROM green_trip_data WHERE date_part("year", lpep_pickup_datetime) = 20{year_str};
             """).fetchone()[0] #get value
             print(f"The green taxi trip that produced the most kilograms of CO2 in the year 20{year_str} released {highest_carbon_g} kilograms. ")
             logger.info(f"The green taxi trip that produced the most kilograms of CO2 in the year 20{year_str} released {highest_carbon_g} kilograms. ")
@@ -39,6 +39,7 @@ def analyze_data():
             carbon_hour_y = con.execute(f""" 
                 SELECT hour_of_day, AVG(trip_co2_kgs) AS avg_co2
                 FROM yellow_trip_data
+                WHERE date_part("year", tpep_pickup_datetime) = 20{year_str}
                 GROUP BY hour_of_day
                 ORDER by avg_co2 DESC;
             """).fetchone() #get list in descending order
@@ -55,6 +56,7 @@ def analyze_data():
             carbon_hour_g = con.execute(f""" 
                 SELECT hour_of_day, AVG(trip_co2_kgs) AS avg_co2
                 FROM green_trip_data
+                WHERE date_part("year", lpep_pickup_datetime) = 20{year_str}
                 GROUP BY hour_of_day
                 ORDER by avg_co2 DESC;
             """).fetchone() #get hours in descending order
@@ -74,6 +76,7 @@ def analyze_data():
             carbon_day_y = con.execute(f""" 
                 SELECT day_of_week, AVG(trip_co2_kgs) AS avg_co2
                 FROM yellow_trip_data
+                WHERE date_part("year", tpep_pickup_datetime) = 20{year_str}
                 GROUP BY day_of_week
                 ORDER by avg_co2 DESC;
             """).fetchone() #get days in descending order
@@ -94,6 +97,7 @@ def analyze_data():
             carbon_day_g = con.execute(f""" 
                 SELECT day_of_week, AVG(trip_co2_kgs) AS avg_co2
                 FROM green_trip_data
+                WHERE date_part("year", lpep_pickup_datetime) = 20{year_str}
                 GROUP BY day_of_week
                 ORDER by avg_co2 DESC;
             """).fetchone() #get days in descending order
@@ -115,6 +119,7 @@ def analyze_data():
             carbon_week_y = con.execute(f""" 
                 SELECT week_of_year, AVG(trip_co2_kgs) AS avg_co2
                 FROM yellow_trip_data
+                WHERE date_part("year", tpep_pickup_datetime) = 20{year_str}
                 GROUP BY week_of_year
                 ORDER by avg_co2 DESC;
             """).fetchone() #get weeks in descending order
@@ -131,6 +136,7 @@ def analyze_data():
             carbon_week_g = con.execute(f""" 
                 SELECT week_of_year, AVG(trip_co2_kgs) AS avg_co2
                 FROM green_trip_data
+                WHERE date_part("year", lpep_pickup_datetime) = 20{year_str}
                 GROUP BY week_of_year
                 ORDER by avg_co2 DESC;
             """).fetchone() #get weeks in descending order
@@ -149,6 +155,7 @@ def analyze_data():
             carbon_month_y = con.execute(f""" 
                 SELECT month_of_year, AVG(trip_co2_kgs) AS avg_co2
                 FROM yellow_trip_data
+                WHERE date_part("year", tpep_pickup_datetime) = 20{year_str}
                 GROUP BY month_of_year
                 ORDER by avg_co2 DESC;
             """).fetchone() #get list of months in descending order
@@ -170,6 +177,7 @@ def analyze_data():
             carbon_month_g = con.execute(f""" 
                 SELECT month_of_year, AVG(trip_co2_kgs) AS avg_co2
                 FROM green_trip_data
+                WHERE date_part("year", tpep_pickup_datetime) = 20{year_str}
                 GROUP BY month_of_year
                 ORDER by avg_co2 DESC;
             """).fetchone() #get months in descending order

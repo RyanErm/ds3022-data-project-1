@@ -85,7 +85,7 @@ def load_parquet_files():
                         SELECT tpep_pickup_datetime, tpep_dropoff_datetime, trip_distance, passenger_count FROM read_parquet("{input_file_yellow}");
              """)
                 logger.info(f"Inserted the following data into yellow table: Month - {month_str}, Year-20{year_str}  ")
-                print("got a yellow table")
+
                 time.sleep(40)
                 
                 #insert green trip data
@@ -94,7 +94,6 @@ def load_parquet_files():
                         SELECT lpep_pickup_datetime, lpep_dropoff_datetime, trip_distance, passenger_count FROM read_parquet("{input_file_green}");
                 """)
                 logger.info(f"Inserted the following data into green table: Month - {month_str}, Year-20{year_str}  ")
-                print('got a green table!')
                 time.sleep(40)
 
     except Exception as e:

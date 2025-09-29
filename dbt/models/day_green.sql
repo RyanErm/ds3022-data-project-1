@@ -1,1 +1,0 @@
-SELECT *, date_part('dayofweek', lpep_pickup_datetime) AS day_of_week FROM green_trip_data;
