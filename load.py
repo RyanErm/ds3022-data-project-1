@@ -67,7 +67,7 @@ def load_parquet_files():
         logger.info("Created green trip data table")
 
         #collecting data for each year
-        for year in range(15,17): #year for loop
+        for year in range(15,25): #year for loop
             for month in range (1,13): #month for loop
                 year_str = str(year) #converting to string
                 if month<10: #convert the month number to the proper format
@@ -101,15 +101,15 @@ def load_parquet_files():
             SELECT COUNT(*) FROM yellow_trip_data;
         """).fetchone()[0]
         num_yellow = str(num_yellow)
-        logger.info(f"The number of entries in the yellow table is {num_yellow}")
-        print(f"The number of entries in the yellow table is {num_yellow}")
+        logger.info(f"The initial number of entries in the yellow table, before cleaning, is {num_yellow}")
+        print(f"The initial number of entries in the yellow table, before cleaning, is {num_yellow}")
 
         num_green = con.execute(f""" 
             SELECT COUNT(*) FROM green_trip_data;
         """).fetchone()[0]
         num_green = str(num_green)
-        logger.info(f"The number of entries in the green table is {num_green}")
-        print(f"The number of entries in the green table is {num_green}")
+        logger.info(f"The initial number of entries in the green table, before cleaning, is {num_green}")
+        print(f"The initial number of entries in the green table, before cleaning, is {num_green}")
 
     except Exception as e:
         print(f"An error occurred: {e}")

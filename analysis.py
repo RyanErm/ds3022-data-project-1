@@ -9,6 +9,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+#main function
 def analyze_data():
     con = None
     try:
@@ -16,9 +17,10 @@ def analyze_data():
         #Connect to local Duckdb
         con = duckdb.connect(database='emissions.duckdb', read_only=False)
         logger.info("Connected to DuckDB instance")
+        print("Connected to Duckdb instance")
 
         #loop through every year
-        for year in range (15,17):
+        for year in range (15,25):
             year_str = year
 
             #Highest emission for yellow 
@@ -189,7 +191,8 @@ def analyze_data():
 
         #Make the plot
 
-        #get averages by month and order by month and year
+        #get sums by month and order by month and year
+        logger.info("Collecting yellow data for image")
         yellow_data = con.execute(f""" 
             SELECT date_part('year', tpep_pickup_datetime) AS year, 
                 SUM(trip_co2_kgs) AS month_sum, 
@@ -210,18 +213,21 @@ def analyze_data():
             FROM yellow_trip_data
             GROUP BY year, month_of_year
             ORDER BY year, month_of_year
-        """).fetchall()
-        print(yellow_data)
+        """).fetchall() #get data
+        #yellow_data is a list of tuples that have the following info: (Year, aggregated emissions per month, month)
 
-        logger.info("Collecting yellow data for image")
         #flatten the data
-        flat_yellow_data = []
-        for year in range (len(yellow_data)):
-            for month in range (yellow_data[year]):
-                dat_str = yellow_data[year][month]
-                flat_yellow_data = dat_str
+        flat_yellow_data = {}
+        #loop through each month
+        for num in range(len(yellow_data)):
+            #create a new id for the month based on the month and year
+            year_lab = yellow_data[num][2] * (yellow_data[num][0] - 2014)
+            #add to dictionairy
+            flat_yellow_data[year_lab] = yellow_data[num][1]
 
-        #get averages by month and order by month and year
+
+        #get sums by month and order by month and year
+        logger.info("Collecting green data for image")
         green_data = con.execute(f""" 
             SELECT date_part('year', lpep_pickup_datetime) AS year, 
                 SUM(trip_co2_kgs) AS month_sum,
@@ -242,38 +248,46 @@ def analyze_data():
             FROM green_trip_data
             GROUP BY year, month_of_year
             ORDER BY year, month_of_year
-        """).fetchall()
-        print(green_data.count)
+        """).fetchall()#get data
+        #yellow_data is a list of tuples that have the following info: (Year, aggregated emissions per month, month)
 
-        logger.info("Collecting green data for image")
 
         #flatten the data
-        flat_green_data = []
-        for year in range(len(green_data)):
-            for month in range (len(year)):
-                dat_str = green_data[year][month]
-                flat_green_data = dat_str
+        flat_green_data = {}
+        #go through each unique month
+        for num in range(len(green_data)):
+            #create a new id for each month based on the month and year
+            year_lab = green_data[num][2] * (green_data[num][0] - 2014)
+            #add to dictionairy
+            flat_green_data[year_lab] = green_data[num][1]
+        
+        
 
-        logger.info("Creating histogram...")
-        # Create histogram
-        plt.hist([flat_yellow_data, flat_green_data], label=['Yellow Taxi', 'Green Taxi'], color=['yellow', 'green'])
+        logger.info("Creating lineplot...")
+
+        # Create lineplot
+        plt.plot(flat_yellow_data.keys(), flat_yellow_data.values(), color = "yellow", marker = "o", label = "Yellow Taxis")
+        plt.plot(flat_green_data.keys(), flat_green_data.values(), color = "green", marker = "o", label = "Green Taxis" )
 
         # Add labels and legend
-        plt.xlabel('Month')
-        plt.ylabel('Average Kg of CO2 per month')
-        plt.title('Histogram of CO2 output per month from 2015-2024 of Yellow and Green Taxi Cabs')
+        plt.xlabel('Months (Jan 2015 = 1, Jan 2016 = 13, etc)')
+        plt.ylabel('Aggregate Kg of CO2 per month (scale of 1e7)')
+        plt.title('Time plot of CO2 output per month from 2015-2024 of \n Yellow and Green Taxi Cabs')
+        plt.tight_layout()
         plt.legend()
 
-        # Show the plot
+        # Show the plot and save it
         plt.savefig('Taxi.png')
         plt.show()
             
 
         logger.info("Done!")
 
+    #error handling
     except Exception as e:
         print(f"An error occurred: {e}")
         logger.error(f"An error occurred: {e}")
 
+#run function
 if __name__ == "__main__":
     analyze_data()

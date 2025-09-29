@@ -1,7 +1,7 @@
 import duckdb
 import logging
 
-#FIX TO GET RID OF NEGATIVE DISTANCE AND NEGATIVE TIME TRIPS
+#FIX TO GET RID OF NEGATIVE TIME TRIPS
 
 #set up logger
 logging.basicConfig(
@@ -17,8 +17,7 @@ def clean_data():
         #Connect to local Duckdb
         con = duckdb.connect(database='emissions.duckdb', read_only=False)
         logger.info("Connected to DuckDB instance")
-
-
+        print("Connected to Duckdb instance")
 
         ### PRE CLEANING TESTING
         print("Starting Pre cleaning testing")
@@ -67,7 +66,7 @@ def clean_data():
         #test for no distance for yellow table
         dist_yellow = con.execute(f"""
             SELECT COUNT(*) FROM yellow_trip_data
-            WHERE trip_distance=0;        
+            WHERE trip_distance<=0;        
         """).fetchone()[0] #get count
         #convert to string
         dist_yellow = str(dist_yellow)
@@ -77,7 +76,7 @@ def clean_data():
         #test for no distance for green table
         dist_green = con.execute(f"""
             SELECT COUNT(*) FROM green_trip_data
-            WHERE trip_distance=0;        
+            WHERE trip_distance<=0;        
         """).fetchone()[0] #get count
         #convert to string
         dist_green = str(dist_green)
@@ -107,7 +106,7 @@ def clean_data():
         #test for trips over 1 day for yellow table
         day_yellow = con.execute(f"""
             SELECT COUNT(*) FROM yellow_trip_data
-            WHERE date_diff('second', tpep_pickup_datetime, tpep_dropoff_datetime) > 86400;         
+            WHERE date_diff('second', tpep_pickup_datetime, tpep_dropoff_datetime) > 86400 OR date_diff('second', tpep_pickup_datetime, tpep_dropoff_datetime) <0;         
         """).fetchone()[0] #get count
         #convert to string
         day_yellow = str(day_yellow)
@@ -117,7 +116,7 @@ def clean_data():
         #test for trips over 1 day for green table
         day_green = con.execute(f"""
             SELECT COUNT(*) FROM green_trip_data
-            WHERE date_diff('second', lpep_pickup_datetime, lpep_dropoff_datetime) > 86400;        
+            WHERE date_diff('second', lpep_pickup_datetime, lpep_dropoff_datetime) > 86400 OR date_diff('second', lpep_pickup_datetime, lpep_dropoff_datetime) <0;        
         """).fetchone()[0] #get count
         #convert to string
         day_green = str(day_green)
@@ -220,14 +219,14 @@ def clean_data():
         #delete entries that had no distance for yellow table
         con.execute(f"""
             DELETE FROM yellow_trip_data
-            WHERE trip_distance = 0;       
+            WHERE trip_distance <= 0;       
         """)
         logger.info("Removed entries that had no distance from yellow table")
 
         #delete entries that had no distance for green table
         con.execute(f"""
             DELETE FROM green_trip_data
-            WHERE trip_distance = 0;       
+            WHERE trip_distance <= 0;       
         """)
         logger.info("Removed entries that had no distance from green table")
 
@@ -248,7 +247,7 @@ def clean_data():
         #delete entries longer than 1 day for yellow table
         con.execute(f"""
             DELETE FROM yellow_trip_data
-            WHERE date_diff('second', tpep_pickup_datetime, tpep_dropoff_datetime) > 86400;       
+            WHERE date_diff('second', tpep_pickup_datetime, tpep_dropoff_datetime) > 86400 OR date_diff('second', tpep_pickup_datetime, tpep_dropoff_datetime) <0;       
         """)
         logger.info("Removed entries that were longer than 1 day from yellow table")
 
@@ -256,7 +255,7 @@ def clean_data():
         #delete entries longer than 1 day for green table
         con.execute(f"""
             DELETE FROM green_trip_data
-            WHERE date_diff('second', lpep_pickup_datetime, lpep_dropoff_datetime) > 86400;        
+            WHERE date_diff('second', lpep_pickup_datetime, lpep_dropoff_datetime) > 86400 OR date_diff('second', lpep_pickup_datetime, lpep_dropoff_datetime) <0;        
         """)
         logger.info("Removed entries that were longer than 1 day from green table")
 
@@ -294,7 +293,7 @@ def clean_data():
         #test for no distance for yellow table
         dist_yellow = con.execute(f"""
             SELECT COUNT(*) FROM yellow_trip_data
-            WHERE trip_distance=0;        
+            WHERE trip_distance<=0;        
         """).fetchone()[0] #get count
         #convert to string
         dist_yellow = str(dist_yellow)
@@ -304,7 +303,7 @@ def clean_data():
         #test for no distance for green table
         dist_green = con.execute(f"""
             SELECT COUNT(*) FROM green_trip_data
-            WHERE trip_distance=0;        
+            WHERE trip_distance<=0;        
         """).fetchone()[0] #get count
         #convert to string
         dist_green = str(dist_green)
@@ -334,7 +333,7 @@ def clean_data():
         #test for trips over 1 day for yellow table
         day_yellow = con.execute(f"""
             SELECT COUNT(*) FROM yellow_trip_data
-            WHERE date_diff('second', tpep_pickup_datetime, tpep_dropoff_datetime) > 86400;         
+            WHERE date_diff('second', tpep_pickup_datetime, tpep_dropoff_datetime) > 86400 OR date_diff('second', tpep_pickup_datetime, tpep_dropoff_datetime) <0;         
         """).fetchone()[0] #get count
         #convert to string
         day_yellow = str(day_yellow)
@@ -344,7 +343,7 @@ def clean_data():
         #test for trips over 1 day for green table
         day_green = con.execute(f"""
             SELECT COUNT(*) FROM green_trip_data
-            WHERE date_diff('second', lpep_pickup_datetime, lpep_dropoff_datetime) > 86400;        
+            WHERE date_diff('second', lpep_pickup_datetime, lpep_dropoff_datetime) > 86400 OR date_diff('second', lpep_pickup_datetime, lpep_dropoff_datetime) <0;        
         """).fetchone()[0] #get count
         #convert to string
         day_green = str(day_green)

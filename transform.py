@@ -2,8 +2,6 @@ import duckdb
 import logging
 #using dbt
 
-## ADD BACK IN THE ADD trip_co2_kgs column
-
 #set up logger
 logging.basicConfig(
     level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s',
@@ -11,6 +9,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+#main function
 def transform_data():
     con = None
 
@@ -18,9 +17,8 @@ def transform_data():
         #Connect to local Duckdb
         con = duckdb.connect(database='emissions.duckdb', read_only=False)
         logger.info("Connected to DuckDB instance")
-        print("Connected")
+        print("Connected to Duckdb instance")
 
-        #adding row id
 
         #update yellow table with new data by making a copy, deleting old one, and renaming new one
         con.execute(f""" 
@@ -33,6 +31,7 @@ def transform_data():
         """)
         logger.info("Updated yellow table with new data by making a copy, deleting old one, and renaming new one")
         print("Updated yellow table with new data by making a copy, deleting old one, and renaming new one")        
+
 
         #green time
 
