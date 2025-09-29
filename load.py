@@ -86,8 +86,8 @@ def load_parquet_files():
                         SELECT tpep_pickup_datetime, tpep_dropoff_datetime, trip_distance, passenger_count FROM read_parquet("{input_file_yellow}");
              """)
                 logger.info(f"Inserted the following data into yellow table: Month - {month_str}, Year-20{year_str}  ")
-
-                time.sleep(40)
+                print(f"Inserted the following data into yellow table: Month - {month_str}, Year-20{year_str}  ")
+                time.sleep(30)
                 
                 #insert green trip data
                 con.execute(f"""
@@ -95,7 +95,8 @@ def load_parquet_files():
                         SELECT lpep_pickup_datetime, lpep_dropoff_datetime, trip_distance, passenger_count FROM read_parquet("{input_file_green}");
                 """)
                 logger.info(f"Inserted the following data into green table: Month - {month_str}, Year-20{year_str}  ")
-                time.sleep(40)
+                print(f"Inserted the following data into green table: Month - {month_str}, Year-20{year_str}  ")
+                time.sleep(30)
 
         num_yellow = con.execute(f""" 
             SELECT COUNT(*) FROM yellow_trip_data;
