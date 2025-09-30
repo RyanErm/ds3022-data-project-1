@@ -67,7 +67,7 @@ def load_parquet_files():
         logger.info("Created green trip data table")
 
         #collecting data for each year
-        for year in range(15,25): #year for loop
+        for year in range(15,16): #year for loop
             for month in range (1,13): #month for loop
                 year_str = str(year) #converting to string
                 if month<10: #convert the month number to the proper format
