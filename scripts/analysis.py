@@ -20,7 +20,7 @@ def analyze_data():
         print("Connected to Duckdb instance")
 
         #loop through every year
-        for year in range (15,16):
+        for year in range (15,25):
             year_str = year
 
             #Highest emission for yellow 
