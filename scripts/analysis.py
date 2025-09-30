@@ -272,7 +272,7 @@ def analyze_data():
         # Add labels and legend
         plt.xlabel('Months (Jan 2015 = 1, Dec 2015 = 12, etc)')
         plt.ylabel('Aggregate Kg of CO2 per month (scale of 1e7)')
-        plt.title('Time plot of CO2 output per month of \n Yellow and Green Taxi Cabs')
+        plt.title('Time plot of CO2 output per month (for 2015-2025) of \n Yellow and Green Taxi Cabs')
         plt.tight_layout()
         plt.legend()
 
