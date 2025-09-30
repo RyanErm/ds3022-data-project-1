@@ -87,7 +87,7 @@ def load_parquet_files():
              """)
                 logger.info(f"Inserted the following data into yellow table: Month - {month_str}, Year-20{year_str}  ")
                 print(f"Inserted the following data into yellow table: Month - {month_str}, Year-20{year_str}  ")
-                time.sleep(30)
+                time.sleep(40)
                 
                 #insert green trip data
                 con.execute(f"""
@@ -96,7 +96,7 @@ def load_parquet_files():
                 """)
                 logger.info(f"Inserted the following data into green table: Month - {month_str}, Year-20{year_str}  ")
                 print(f"Inserted the following data into green table: Month - {month_str}, Year-20{year_str}  ")
-                time.sleep(30)
+                time.sleep(40)
 
         num_yellow = con.execute(f""" 
             SELECT COUNT(*) FROM yellow_trip_data;
